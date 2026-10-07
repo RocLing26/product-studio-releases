@@ -1,26 +1,26 @@
 # Product Studio 安装与模型配置
 
-适用于当前正式版 v0.18.16。Product Studio 的发布包是 Node.js 服务，浏览器访问工作台；它不是桌面 EXE/MSI。ZIP 包含已构建的网页、服务端和运行依赖，不含 Node.js、用户数据和模型密钥。
+适用于当前正式版 v0.19.1。Product Studio 的发布包是 Node.js 服务，浏览器访问工作台；它不是桌面 EXE/MSI。ZIP 包含已构建的网页、服务端和运行依赖，不含 Node.js、用户数据和模型密钥。
 
 ## 准备与校验
 
 1. 安装 Node.js 22.13 或更高版本，运行 `node --version` 确认版本。使用 ZIP 不需要 `npm install`。
-2. 从 [最新正式发布](https://github.com/RocLing26/product-studio-releases/releases/latest) 下载 `product-studio-0.18.16-intranet.zip` 和 `product-studio-0.18.16-intranet.zip.sha256`，放在同一目录。
+2. 从 [最新正式发布](https://github.com/RocLing26/product-studio-releases/releases/latest) 下载 `product-studio-0.19.1-intranet.zip` 和 `product-studio-0.19.1-intranet.zip.sha256`，放在同一目录。
 3. 在该目录校验文件，再解压 ZIP：
 
 ```bash
 # macOS
-shasum -a 256 -c product-studio-0.18.16-intranet.zip.sha256
+shasum -a 256 -c product-studio-0.19.1-intranet.zip.sha256
 
 # Linux（二选一，执行这一行即可）
-sha256sum -c product-studio-0.18.16-intranet.zip.sha256
+sha256sum -c product-studio-0.19.1-intranet.zip.sha256
 ```
 
-Windows PowerShell 可运行 `Get-FileHash .\product-studio-0.18.16-intranet.zip -Algorithm SHA256`，将输出的哈希与 `.sha256` 文件第一列比较。校验失败时重新下载。
+Windows PowerShell 可运行 `Get-FileHash .\product-studio-0.19.1-intranet.zip -Algorithm SHA256`，将输出的哈希与 `.sha256` 文件第一列比较。校验失败时重新下载。
 
 ## 本机启动
 
-解压后进入 `product-studio-0.18.16-intranet` 目录，运行：
+解压后进入 `product-studio-0.19.1-intranet` 目录，运行：
 
 ```bash
 node server/index.mjs
@@ -41,7 +41,7 @@ Windows PowerShell 可在启动前设置 `$env:PM_DATA_DIR = 'C:\ProductStudio\d
 
 升级时先停止服务，备份完整数据目录及内网部署使用的 `.env`；将新版 ZIP 解压到新的程序目录，用原来的 `PM_DATA_DIR` 和 `.env` 启动。不要覆盖正在运行的目录，也不要用旧版程序打开新版数据库。工作台可以检查、下载并校验正式更新，但不会自动替换程序。
 
-### 0.18.16 的备份与恢复命令
+### 0.19.1 的备份与恢复命令
 
 在解压后的程序目录中运行以下命令；将占位路径替换为实际路径，备份输出放在数据目录之外：
 
@@ -96,6 +96,10 @@ PM_MODEL_API_KEY=your-private-api-key
 ```
 
 `PM_MODEL_*` 环境变量会覆盖界面中的当前生成配置；移除后重启即可改由界面选择。示例值需替换为实际服务信息，不要提交含密钥的 `.env`。如果连接测试失败，检查服务器到模型地址的网络、API Key、模型 ID，以及服务商要求的输出参数和流式支持。
+
+## 知识提炼并行
+
+0.19.1 默认每份文档同时提炼最多 3 段。失败重试或重启恢复复用已核对分段，来源版本、正文或模型配置变化时重新提炼；整份完成后才写入知识。管理员可在数据目录 `runtime.json` 设置 `maxConcurrentKnowledgeChunks` 为 1–8（默认 3，1 为串行），保留已有的 `maxConcurrentJobs`。并行上限在任务启动时读取。
 
 ## 健康检查
 
