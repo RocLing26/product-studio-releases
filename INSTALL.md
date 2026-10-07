@@ -1,26 +1,26 @@
 # Product Studio 安装与模型配置
 
-适用于当前正式版 v0.19.2。Product Studio 的发布包是 Node.js 服务，浏览器访问工作台；它不是桌面 EXE/MSI。ZIP 包含已构建的网页、服务端和运行依赖，不含 Node.js、用户数据和模型密钥。
+适用于当前正式版 v0.19.3。Product Studio 的发布包是 Node.js 服务，浏览器访问工作台；它不是桌面 EXE/MSI。ZIP 包含已构建的网页、服务端和运行依赖，不含 Node.js、用户数据和模型密钥。
 
 ## 准备与校验
 
 1. 安装 Node.js 22.13 或更高版本，运行 `node --version` 确认版本。使用 ZIP 不需要 `npm install`。
-2. 从 [最新正式发布](https://github.com/RocLing26/product-studio-releases/releases/latest) 下载 `product-studio-0.19.2-intranet.zip` 和 `product-studio-0.19.2-intranet.zip.sha256`，放在同一目录。
+2. 从 [最新正式发布](https://github.com/RocLing26/product-studio-releases/releases/latest) 下载 `product-studio-0.19.3-intranet.zip` 和 `product-studio-0.19.3-intranet.zip.sha256`，放在同一目录。
 3. 在该目录校验文件，再解压 ZIP：
 
 ```bash
 # macOS
-shasum -a 256 -c product-studio-0.19.2-intranet.zip.sha256
+shasum -a 256 -c product-studio-0.19.3-intranet.zip.sha256
 
 # Linux（二选一，执行这一行即可）
-sha256sum -c product-studio-0.19.2-intranet.zip.sha256
+sha256sum -c product-studio-0.19.3-intranet.zip.sha256
 ```
 
-Windows PowerShell 可运行 `Get-FileHash .\product-studio-0.19.2-intranet.zip -Algorithm SHA256`，将输出的哈希与 `.sha256` 文件第一列比较。校验失败时重新下载。
+Windows PowerShell 可运行 `Get-FileHash .\product-studio-0.19.3-intranet.zip -Algorithm SHA256`，将输出的哈希与 `.sha256` 文件第一列比较。校验失败时重新下载。
 
 ## 本机启动
 
-解压后进入 `product-studio-0.19.2-intranet` 目录，运行：
+解压后进入 `product-studio-0.19.3-intranet` 目录，运行：
 
 ```bash
 node server/index.mjs
@@ -41,7 +41,7 @@ Windows PowerShell 可在启动前设置 `$env:PM_DATA_DIR = 'C:\ProductStudio\d
 
 升级时先停止服务，备份完整数据目录及内网部署使用的 `.env`；将新版 ZIP 解压到新的程序目录，用原来的 `PM_DATA_DIR` 和 `.env` 启动。不要覆盖正在运行的目录，也不要用旧版程序打开新版数据库。工作台可以检查、下载并校验正式更新，但不会自动替换程序。
 
-### 0.19.2 的备份与恢复命令
+### 0.19.3 的备份与恢复命令
 
 在解压后的程序目录中运行以下命令；将占位路径替换为实际路径，备份输出放在数据目录之外：
 
@@ -97,16 +97,20 @@ PM_MODEL_API_KEY=your-private-api-key
 
 `PM_MODEL_*` 环境变量会覆盖界面中的当前生成配置；移除后重启即可改由界面选择。示例值需替换为实际服务信息，不要提交含密钥的 `.env`。如果连接测试失败，检查服务器到模型地址的网络、API Key、模型 ID，以及服务商要求的输出参数和流式支持。
 
-## 提炼、灵感与调研并行
+## 可视化并行设置
 
-当前版默认每份文档同时提炼最多 3 段；调研搜索、网页读取与灵感同轮独立工具默认最多 3 路并行。在数据目录 `runtime.json` 中保留已有 `maxConcurrentJobs`，可设置：
+打开 **工作台配置 → 并行执行**，所有项目共用以下上限：
 
-- `maxConcurrentKnowledgeChunks`：文档分段并行，1–8，默认 3。
-- `maxConcurrentResearchRequests`：调研请求/灵感同轮独立工具并行，1–6，默认 3。
+| 界面名称 | 配置字段 | 范围 / 默认 |
+| --- | --- | --- |
+| 需求生成任务 | `maxConcurrentJobs` | 1–50 / 10 |
+| 知识提炼分段 | `maxConcurrentKnowledgeChunks` | 1–8 / 3 |
+| 灵感与调研 | `maxConcurrentResearchRequests` | 1–6 / 3 |
+| 知识图谱提炼 | `maxConcurrentGraphExtractions` | 1–6 / 3 |
 
-设为 1 可分别使用串行执行。原运行设置界面只保存需求并行数时保留上述两个值。调研在任务开始读取上限，灵感在每轮工具执行前读取；这不是全部 Provider 请求的全局并发限制。
+修改后点击“保存并行设置”，设为 1 可相应串行处理。Agent 运行记录页只显示当前需求上限并提供跳转入口，原编辑表单已合并。只保存修改项，旧客户端仅修改需求并行数时保留其它上限；刷新保留尚未提交的修改，保存失败保留输入。设置会保存在数据目录 runtime.json，备份时一并保留。
 
-文档提炼复用已核对分段，整份完成后才写入知识；来源或模型配置变化时重新提炼。调研保存已完成请求断点，按计划顺序汇总，最多读取 6 个正文来源；失败、接管或取消时收口在途请求，迟到响应不会写入已取消任务。前后依赖的模型生成与人工审核继续执行。
+已开始请求继续，后续任务、工具轮次或图谱批次使用新设置。这些值分别控制工作类型，不是全部 Provider 请求的统一并发上限。文档提炼整份完成后才写入知识；图谱关系仍需人工审核；调研保留已完成请求断点、原定来源顺序和最多 6 个正文来源。证据与前后生成依赖继续校验。
 
 ## 健康检查
 
