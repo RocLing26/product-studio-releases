@@ -4,7 +4,16 @@
 
 Product Studio 把灵感探索、产品调研、需求文档、交互原型、设计文档、项目规划与产品知识连接在一条工作流中。Agent 会追问关键问题，帮助把模糊想法整理成需求。记录上线时，Agent 结合已确认的需求文档、原型、设计文档和实际交付内容提炼知识、更新知识库；知识冲突会进入待处理队列，供产品负责人核对。
 
-当前版本：**0.19.6**。
+当前版本：**0.19.7**。
+
+## 0.19.7 本地 Embedding 一键配置
+
+“工作台配置 → 模型与搜索 → Embedding 模型”新增一键配置弹窗，默认 Ollama + Qwen3-Embedding-0.6B，可按设备能力修改本地模型名称。先阅读说明并确认，才安装组件与下载模型；优先复用已有环境，成功试跑向量后自动回填并选中Embedding服务，生成模型配置保持。
+
+支持Windows/macOS；新版Ollama要求Windows10 22H2+/Windows11或macOS14+。首次准备需要联网、写入权限和磁盘/内存；已有组件与模型在升级后继续复用。后台显示步骤与日志，关闭后可重开，失败保留配置并可重试；手动部署步骤和其它模型说明见[安装说明](INSTALL.md#本地-embedding-一键配置0197)。本机真实默认模型复用与1024维向量已验证，Windows安装分支为模拟检查，未声称Windows原机验收通过。
+
+![本地 Embedding 安装配置](screenshots/local-embedding-setup-desktop.png)
+![手机本地 Embedding 说明](screenshots/local-embedding-setup-mobile.png)
 
 ## 0.19.6 同版本修订（2026-10-08）
 

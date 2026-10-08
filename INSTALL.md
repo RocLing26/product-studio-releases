@@ -160,3 +160,15 @@ PRD验收支持编号下的给定／当／那么子列表，完整条件作为�
 成功后自动回填组件路径和缓存目录，未保存的其它页面输入保持。配置变化冲突时不覆盖新的手工设置。任务在后台运行，关闭弹窗后可重新打开查看步骤和最近日志，服务重启时中断任务提示重试，不自动重新安装。
 
 升级复用原Python、依赖、模型和浏览器缓存：不在程序启动或升级时执行pip。新下载缓存默认在版本安装目录之外的components（独立数据目录则使用其components子目录）；operations.json记录绝对路径，升级保留该文件及对应缓存位置。组件缓存不属于数据库/配置备份范围，不能只迁移operations.json到另一台机器后就认为组件可用。需要换设备时按弹窗在新设备准备并检测。
+
+## 本地 Embedding 一键配置（0.19.7）
+
+“工作台配置 → 模型与搜索 → Embedding 模型”点击“一键配置本地 Embedding”，先阅读说明并确认，再执行安装。默认使用 Ollama + `qwen3-embedding:0.6b`，模型约639MB；首次准备组件需联网、当前账号写入权限，建议至少8GB可用磁盘并预留运行内存。可按设备能力修改为其它本地 Embedding 模型名称，较大模型需要更多资源。
+
+安装和模型下载在工作台**服务所在设备**执行。优先复用已有 Ollama 和模型，不使用 Python；缺少组件时从官方发布下载并校验SHA-256。新版Ollama要求Windows10 22H2+/Windows11，或macOS14+，支持x64/ARM64；旧系统可自行准备兼容版本再复用。Windows使用官方用户安装器，macOS使用官方CLI组件；设备安全提示应在服务设备处理。只监听本机11434端口。
+
+连接试跑检查合成文本的向量后，自动添加并选中“本地 Ollama Embedding”：API地址`http://127.0.0.1:11434/v1`，模型为所选名称，API Key使用本地接口占位值`ollama`；生成模型配置保留。失败时保留原Embedding选择，已下载文件保留供重试；期间手工修改Embedding配置会阻止自动覆盖。弹窗关闭后后台继续，可重新打开查看进度和日志；重启中断的安装须重新确认，不自动重新下载。
+
+组件与模型存放在版本目录外，升级继续复用。自行部署其它本地模型后也可用此流程检测回填，或手动添加兼容Provider。Embedding由PM_EMBEDDING_*环境变量管理时，须先移除对应覆盖并重启。Python/模型缓存与Ollama数据是不同组件；完整数据库/配置备份不包含Ollama模型，换设备需另行准备或迁移模型。
+
+参考：[Ollama Windows](https://docs.ollama.com/windows)、[macOS](https://docs.ollama.com/macos)、[默认模型](https://ollama.com/library/qwen3-embedding:0.6b)、[兼容接口](https://docs.ollama.com/api/openai-compatibility)。
