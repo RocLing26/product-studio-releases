@@ -4,7 +4,15 @@
 
 Product Studio 把灵感探索、产品调研、需求文档、交互原型、设计文档、项目规划与产品知识连接在一条工作流中。Agent 会追问关键问题，帮助把模糊想法整理成需求。记录上线时，Agent 结合已确认的需求文档、原型、设计文档和实际交付内容提炼知识、更新知识库；知识冲突会进入待处理队列，供产品负责人核对。
 
-当前版本：**0.19.3**。
+当前版本：**0.19.4**。
+
+## 0.19.4 跨源冲突知识纠错与误判修正
+
+跨源冲突详情的知识侧支持编辑完整标题和正文，点击“保存并重新校验”后立即检查本组来源；仍有疑似冲突时自动模型复核。保存检查知识与来源版本，错误时保留输入；模型不可用会明确提示知识已保存，可再次复核。
+
+本轮修正单位等价、不同对象/地区/套餐/生效范围混比、逗号前条件丢失、相同角色的“仅/所有”误判，保留章节和表格上下文。规则只提示疑似冲突，复杂改写仍需模型与人工核对。升级后旧扫描按新规则逐步重做，保留人工处理决定和已有复核记录；受控回归不代表真实业务准确率。
+
+![跨源冲突知识编辑](screenshots/content-conflict-edit.png)
 
 ## 0.19.3 统一配置与速度优化
 
@@ -64,8 +72,8 @@ Product Studio 把灵感探索、产品调研、需求文档、交互原型、�
 
 ## 安装与启动
 
-1. 安装 Node.js 22.13 或更高版本。在 [Releases](https://github.com/RocLing26/product-studio-releases/releases/latest) 下载 `product-studio-0.19.3-intranet.zip` 及同名 `.sha256` 文件，并按 [完整安装说明](INSTALL.md) 校验 SHA-256。
-2. 解压 ZIP，进入 `product-studio-0.19.3-intranet` 目录，运行 `node server/index.mjs`。包内已包含运行依赖，无需执行 `npm install`。
+1. 安装 Node.js 22.13 或更高版本。在 [Releases](https://github.com/RocLing26/product-studio-releases/releases/latest) 下载 `product-studio-0.19.4-intranet.zip` 及同名 `.sha256` 文件，并按 [完整安装说明](INSTALL.md) 校验 SHA-256。
+2. 解压 ZIP，进入 `product-studio-0.19.4-intranet` 目录，运行 `node server/index.mjs`。包内已包含运行依赖，无需执行 `npm install`。
 3. 在本机浏览器打开 `http://127.0.0.1:4310`。默认数据保存在解压目录下的 `.data/`；正式使用建议按 [完整安装说明](INSTALL.md#数据保存与升级)设置独立的 `PM_DATA_DIR`。
 
 这是供浏览器访问的 Node.js 服务包，不是桌面安装程序。多设备内网访问需要配置 HTTPS 地址和访问口令，步骤见 [内网部署](INSTALL.md#内网-https-部署)。

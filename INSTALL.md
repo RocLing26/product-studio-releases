@@ -1,26 +1,26 @@
 # Product Studio 安装与模型配置
 
-适用于当前正式版 v0.19.3。Product Studio 的发布包是 Node.js 服务，浏览器访问工作台；它不是桌面 EXE/MSI。ZIP 包含已构建的网页、服务端和运行依赖，不含 Node.js、用户数据和模型密钥。
+适用于当前正式版 v0.19.4。Product Studio 的发布包是 Node.js 服务，浏览器访问工作台；它不是桌面 EXE/MSI。ZIP 包含已构建的网页、服务端和运行依赖，不含 Node.js、用户数据和模型密钥。
 
 ## 准备与校验
 
 1. 安装 Node.js 22.13 或更高版本，运行 `node --version` 确认版本。使用 ZIP 不需要 `npm install`。
-2. 从 [最新正式发布](https://github.com/RocLing26/product-studio-releases/releases/latest) 下载 `product-studio-0.19.3-intranet.zip` 和 `product-studio-0.19.3-intranet.zip.sha256`，放在同一目录。
+2. 从 [最新正式发布](https://github.com/RocLing26/product-studio-releases/releases/latest) 下载 `product-studio-0.19.4-intranet.zip` 和 `product-studio-0.19.4-intranet.zip.sha256`，放在同一目录。
 3. 在该目录校验文件，再解压 ZIP：
 
 ```bash
 # macOS
-shasum -a 256 -c product-studio-0.19.3-intranet.zip.sha256
+shasum -a 256 -c product-studio-0.19.4-intranet.zip.sha256
 
 # Linux（二选一，执行这一行即可）
-sha256sum -c product-studio-0.19.3-intranet.zip.sha256
+sha256sum -c product-studio-0.19.4-intranet.zip.sha256
 ```
 
-Windows PowerShell 可运行 `Get-FileHash .\product-studio-0.19.3-intranet.zip -Algorithm SHA256`，将输出的哈希与 `.sha256` 文件第一列比较。校验失败时重新下载。
+Windows PowerShell 可运行 `Get-FileHash .\product-studio-0.19.4-intranet.zip -Algorithm SHA256`，将输出的哈希与 `.sha256` 文件第一列比较。校验失败时重新下载。
 
 ## 本机启动
 
-解压后进入 `product-studio-0.19.3-intranet` 目录，运行：
+解压后进入 `product-studio-0.19.4-intranet` 目录，运行：
 
 ```bash
 node server/index.mjs
@@ -41,7 +41,7 @@ Windows PowerShell 可在启动前设置 `$env:PM_DATA_DIR = 'C:\ProductStudio\d
 
 升级时先停止服务，备份完整数据目录及内网部署使用的 `.env`；将新版 ZIP 解压到新的程序目录，用原来的 `PM_DATA_DIR` 和 `.env` 启动。不要覆盖正在运行的目录，也不要用旧版程序打开新版数据库。工作台可以检查、下载并校验正式更新，但不会自动替换程序。
 
-### 0.19.3 的备份与恢复命令
+### 0.19.4 的备份与恢复命令
 
 在解压后的程序目录中运行以下命令；将占位路径替换为实际路径，备份输出放在数据目录之外：
 
@@ -115,3 +115,9 @@ PM_MODEL_API_KEY=your-private-api-key
 ## 健康检查
 
 本机启动后打开 `http://127.0.0.1:4310/api/health`，应返回服务健康状态。内网访问出现 403 时，检查浏览器访问地址、`.env` 中的 `PM_PUBLIC_ORIGIN` 与反向代理保留的 Host 是否一致。
+
+## 跨源冲突知识纠错
+
+打开知识页的跨源冲突详情，在知识侧点击“编辑知识”，修改完整标题和正文后点击“保存并重新校验”。保存检查知识与来源版本，仍检出疑似冲突时自动模型复核；模型不可用会提示知识已保存及复核错误，可以再次复核。自动校验未再检出不代表模型已确认无冲突，其它关联来源继续后台校验。
+
+0.19.4 升级到 schema v37，增加扫描规则版本，历史扫描按新规则逐步重做；人工忽略/处理决定和已有模型复核记录保留。复杂改写仍需模型与人工核对。升级前备份完整数据目录及 .env，回退同时恢复升级前数据库，禁止让旧程序打开已迁移的库。
