@@ -4,7 +4,19 @@
 
 Product Studio 把灵感探索、产品调研、需求文档、交互原型、设计文档、项目规划与产品知识连接在一条工作流中。Agent 会追问关键问题，帮助把模糊想法整理成需求。记录上线时，Agent 结合已确认的需求文档、原型、设计文档和实际交付内容提炼知识、更新知识库；知识冲突会进入待处理队列，供产品负责人核对。
 
-当前版本：**0.19.4**。
+当前版本：**0.19.5**。
+
+## 0.19.5 图谱批量提炼、运行配置与PDF复核
+
+“知识图谱 → 批量提炼已有知识”支持搜索、多选/全选、后台提交、分段进度及失败项重试，关闭面板后继续。长知识分段并行，自动/手动/批量共用图谱请求上限，成功分段断点支持重试及重启复用，结果仍需审核。固定60ms本地对照，6段长知识371.62ms→125.70ms，调用均6；混合9条任务182.92ms→145.08ms，调用均9。受控收益不代表真实模型延迟或准确率。
+
+“工作台配置 → 运行与备份”可视化修改组件启停、Python/Docling/模型路径与备份目录，保存后生效并重新检查组件。提供安装说明、立即备份和最近备份校验，数据库与各类配置（含operations.json）一并保存。页面采用无边框浅色卡片，外部同步资料目录仍需单独备份。
+
+PDF 默认提取文字0页时，原文对照与增强解析按钮固定在标题下，不显示空正文框或导入按钮；增强结果的正文/表单单独滚动。知识库、计划和附件入口共享桌面/手机布局；Word/HTML/Markdown/TXT导入也已回归。schema v38 增加图谱分段断点，少字页和人工复核要求保持。
+
+![图谱批量提炼](screenshots/graph-batch-extraction.png)
+![可视化运行与备份](screenshots/operations-settings.png)
+![PDF默认未提取内容的复核弹窗](screenshots/pdf-review-empty.png)
 
 ## 0.19.4 跨源冲突知识纠错与误判修正
 
@@ -72,8 +84,8 @@ Product Studio 把灵感探索、产品调研、需求文档、交互原型、�
 
 ## 安装与启动
 
-1. 安装 Node.js 22.13 或更高版本。在 [Releases](https://github.com/RocLing26/product-studio-releases/releases/latest) 下载 `product-studio-0.19.4-intranet.zip` 及同名 `.sha256` 文件，并按 [完整安装说明](INSTALL.md) 校验 SHA-256。
-2. 解压 ZIP，进入 `product-studio-0.19.4-intranet` 目录，运行 `node server/index.mjs`。包内已包含运行依赖，无需执行 `npm install`。
+1. 安装 Node.js 22.13 或更高版本。在 [Releases](https://github.com/RocLing26/product-studio-releases/releases/latest) 下载 `product-studio-0.19.5-intranet.zip` 及同名 `.sha256` 文件，并按 [完整安装说明](INSTALL.md) 校验 SHA-256。
+2. 解压 ZIP，进入 `product-studio-0.19.5-intranet` 目录，运行 `node server/index.mjs`。包内已包含运行依赖，无需执行 `npm install`。
 3. 在本机浏览器打开 `http://127.0.0.1:4310`。默认数据保存在解压目录下的 `.data/`；正式使用建议按 [完整安装说明](INSTALL.md#数据保存与升级)设置独立的 `PM_DATA_DIR`。
 
 这是供浏览器访问的 Node.js 服务包，不是桌面安装程序。多设备内网访问需要配置 HTTPS 地址和访问口令，步骤见 [内网部署](INSTALL.md#内网-https-部署)。

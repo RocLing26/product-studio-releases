@@ -1,26 +1,26 @@
 # Product Studio 安装与模型配置
 
-适用于当前正式版 v0.19.4。Product Studio 的发布包是 Node.js 服务，浏览器访问工作台；它不是桌面 EXE/MSI。ZIP 包含已构建的网页、服务端和运行依赖，不含 Node.js、用户数据和模型密钥。
+适用于当前正式版 v0.19.5。Product Studio 的发布包是 Node.js 服务，浏览器访问工作台；它不是桌面 EXE/MSI。ZIP 包含已构建的网页、服务端和运行依赖，不含 Node.js、用户数据和模型密钥。
 
 ## 准备与校验
 
 1. 安装 Node.js 22.13 或更高版本，运行 `node --version` 确认版本。使用 ZIP 不需要 `npm install`。
-2. 从 [最新正式发布](https://github.com/RocLing26/product-studio-releases/releases/latest) 下载 `product-studio-0.19.4-intranet.zip` 和 `product-studio-0.19.4-intranet.zip.sha256`，放在同一目录。
+2. 从 [最新正式发布](https://github.com/RocLing26/product-studio-releases/releases/latest) 下载 `product-studio-0.19.5-intranet.zip` 和 `product-studio-0.19.5-intranet.zip.sha256`，放在同一目录。
 3. 在该目录校验文件，再解压 ZIP：
 
 ```bash
 # macOS
-shasum -a 256 -c product-studio-0.19.4-intranet.zip.sha256
+shasum -a 256 -c product-studio-0.19.5-intranet.zip.sha256
 
 # Linux（二选一，执行这一行即可）
-sha256sum -c product-studio-0.19.4-intranet.zip.sha256
+sha256sum -c product-studio-0.19.5-intranet.zip.sha256
 ```
 
-Windows PowerShell 可运行 `Get-FileHash .\product-studio-0.19.4-intranet.zip -Algorithm SHA256`，将输出的哈希与 `.sha256` 文件第一列比较。校验失败时重新下载。
+Windows PowerShell 可运行 `Get-FileHash .\product-studio-0.19.5-intranet.zip -Algorithm SHA256`，将输出的哈希与 `.sha256` 文件第一列比较。校验失败时重新下载。
 
 ## 本机启动
 
-解压后进入 `product-studio-0.19.4-intranet` 目录，运行：
+解压后进入 `product-studio-0.19.5-intranet` 目录，运行：
 
 ```bash
 node server/index.mjs
@@ -41,7 +41,7 @@ Windows PowerShell 可在启动前设置 `$env:PM_DATA_DIR = 'C:\ProductStudio\d
 
 升级时先停止服务，备份完整数据目录及内网部署使用的 `.env`；将新版 ZIP 解压到新的程序目录，用原来的 `PM_DATA_DIR` 和 `.env` 启动。不要覆盖正在运行的目录，也不要用旧版程序打开新版数据库。工作台可以检查、下载并校验正式更新，但不会自动替换程序。
 
-### 0.19.4 的备份与恢复命令
+### 0.19.5 的备份与恢复命令
 
 在解压后的程序目录中运行以下命令；将占位路径替换为实际路径，备份输出放在数据目录之外：
 
@@ -120,4 +120,12 @@ PM_MODEL_API_KEY=your-private-api-key
 
 打开知识页的跨源冲突详情，在知识侧点击“编辑知识”，修改完整标题和正文后点击“保存并重新校验”。保存检查知识与来源版本，仍检出疑似冲突时自动模型复核；模型不可用会提示知识已保存及复核错误，可以再次复核。自动校验未再检出不代表模型已确认无冲突，其它关联来源继续后台校验。
 
-0.19.4 升级到 schema v37，增加扫描规则版本，历史扫描按新规则逐步重做；人工忽略/处理决定和已有模型复核记录保留。复杂改写仍需模型与人工核对。升级前备份完整数据目录及 .env，回退同时恢复升级前数据库，禁止让旧程序打开已迁移的库。
+0.19.5 升级到 schema v38，增加扫描规则版本，历史扫描按新规则逐步重做；人工忽略/处理决定和已有模型复核记录保留。复杂改写仍需模型与人工核对。升级前备份完整数据目录及 .env，回退同时恢复升级前数据库，禁止让旧程序打开已迁移的库。
+
+## 图谱批量提炼与运行配置
+
+在“知识图谱 → 批量提炼已有知识”搜索并多选/全选已生效知识，每批最多1000条。任务在后台执行，关闭面板后继续，可查看每条分段进度并重试失败项；重试/重启复用有效分段，知识正文/版本或模型配置变化时重提。自动、单条及批量共用“并行执行”的图谱模型请求上限，范围1–6，默认3。提炼结果仍需原文核对和审核。
+
+“运行与备份”支持浏览器验收启停/Python、PDF启停/Docling程序/模型目录/可选Python与备份输出目录。填写服务运行设备上的路径，展开安装步骤后按已验证版本准备依赖，保存到数据目录operations.json并立即用于后续操作。运行中的PDF继续使用开始时的配置，后续解析使用新配置。
+
+点击“立即备份”在线备份数据库、模型/搜索/运行/提示词/组件配置及可用.env，并校验SHA-256和数据库完整性/外键/版本；“校验最近备份”重新核验副本。部署包默认备份到版本目录之外的backups目录，可在页面修改。外部同步资料目录需单独备份。schema v38保存图谱断点；升级和回退须一起备份、恢复对应数据及配置。
